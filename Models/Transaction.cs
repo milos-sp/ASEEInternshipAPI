@@ -6,7 +6,7 @@
 
         public string BeneficiaryName { get; set; } = string.Empty;
 
-        public DateOnly Date { get; set; }
+        public string Date { get; set; }
 
         public Directions Direction { get; set; }
 

@@ -5,22 +5,25 @@ namespace ProductAPI.Commands
 {
     public class CreateTransactionCommand
     {
-        // public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
 
         public string BeneficiaryName { get; set; } = string.Empty;
 
         [Required]
-        public DateOnly Date { get; set; }
+        public string Date { get; set; }
 
         [Required]
         public Directions Direction { get; set; } // d ili c
 
         [Required]
-        public double Amount { get; set; }
+        // [RegularExpression(@"\d+", ErrorMessage = "Amount not in right format")]
+        public string Amount { get; set; }
 
         public string Description { get; set; } = string.Empty;
 
         [Required]
+        [MaxLength(3)]
+        [MinLength(3)]
         public string Currency { get; set; } = string.Empty;
 
         public int Mcc { get; set; }

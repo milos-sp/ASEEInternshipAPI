@@ -7,8 +7,8 @@ namespace ProductAPI.Database.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        ProductDbContext _dbContext;
-        public ProductRepository(ProductDbContext dbContext)
+        DatabaseContext _dbContext;
+        public ProductRepository(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

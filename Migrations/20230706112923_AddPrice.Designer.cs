@@ -11,7 +11,7 @@ using ProductAPI.Database;
 
 namespace ProductAPI.Migrations
 {
-    [DbContext(typeof(ProductDbContext))]
+    [DbContext(typeof(DatabaseContext))]
     [Migration("20230706112923_AddPrice")]
     partial class AddPrice
     {

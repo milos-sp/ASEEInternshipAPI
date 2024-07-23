@@ -2,6 +2,7 @@
 using ProductAPI.Commands;
 using ProductAPI.Database.Entities;
 using ProductAPI.Models;
+using System.Text.RegularExpressions;
 namespace ProductAPI.Mappings
 {
     public class AutoMapperProfile : Profile

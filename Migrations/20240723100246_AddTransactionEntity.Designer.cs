@@ -11,7 +11,7 @@ using ProductAPI.Database;
 
 namespace ProductAPI.Migrations
 {
-    [DbContext(typeof(ProductDbContext))]
+    [DbContext(typeof(DatabaseContext))]
     [Migration("20240723100246_AddTransactionEntity")]
     partial class AddTransactionEntity
     {

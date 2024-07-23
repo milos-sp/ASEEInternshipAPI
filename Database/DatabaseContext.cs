@@ -5,10 +5,11 @@ using ProductAPI.Database.Entities;
 
 namespace ProductAPI.Database
 {
-    public class ProductDbContext : DbContext
+    public class DatabaseContext : DbContext
     {
-        public ProductDbContext(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions options) : base(options)
         {
+
         }
 
         public DbSet<ProductEntity> Products { get; set; }

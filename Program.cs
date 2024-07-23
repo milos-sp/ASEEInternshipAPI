@@ -22,12 +22,16 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ICSVService, CSVService>();
 // AutoMapper definition
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddControllers().AddJsonOptions(options => // ovo pretvara enum u string a ne int
 {
     options.JsonSerializerOptions.Converters.Add(
-        new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase) // KebabCaseLower?
+        new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase)
         );
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower; // sredjeno da response bude kebab case
@@ -38,7 +42,7 @@ builder.Services.AddControllers().AddJsonOptions(options => // ovo pretvara enum
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // DBContext registration
-builder.Services.AddDbContext<ProductDbContext>(opt =>
+builder.Services.AddDbContext<DatabaseContext>(opt =>
 {
     opt.UseNpgsql(CreateConnectionString(builder.Configuration));
 });
@@ -53,7 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
-    scope.ServiceProvider.GetRequiredService<ProductDbContext>().Database.Migrate();
+    scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
 }
 
 app.UseAuthorization();

@@ -12,6 +12,6 @@ namespace ProductAPI.Database.Repositories
 
         Task DeleteTransactionAsync(TransactionEntity transaction);
 
-        Task<TransactionEntity> GetTransactionByIdAsync(TransactionEntity transactionId);
+        Task<TransactionEntity> GetTransactionByIdAsync(string transactionId);
     }
 }

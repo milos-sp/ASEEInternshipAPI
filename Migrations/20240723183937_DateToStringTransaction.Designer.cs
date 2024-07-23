@@ -12,8 +12,8 @@ using ProductAPI.Database;
 namespace ProductAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240723102921_AddTransactionEntityCheck")]
-    partial class AddTransactionEntityCheck
+    [Migration("20240723183937_DateToStringTransaction")]
+    partial class DateToStringTransaction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,8 +92,9 @@ namespace ProductAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()

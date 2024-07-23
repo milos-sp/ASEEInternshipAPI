@@ -4,12 +4,11 @@ namespace ProductAPI.Database.Entities
 {
     public class TransactionEntity
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty; // valjda je string
         public string BeneficiaryName { get; set; } = string.Empty;
 
-        public DateOnly Date { get; set; } // dateonly ili string?
+        public string Date { get; set; } // dateonly ili string?
 
-        // direction neki ordered map
         public Directions Direction { get; set; } // d ili c
 
         public double Amount { get; set; }
@@ -18,7 +17,6 @@ namespace ProductAPI.Database.Entities
 
         public string Currency { get; set; } = string.Empty; // min i max length su 3 po standardu
 
-        // mcc je neki enum
         public int Mcc { get; set; }
 
         // kind je isto enum

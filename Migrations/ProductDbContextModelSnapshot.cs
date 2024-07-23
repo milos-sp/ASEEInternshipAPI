@@ -10,7 +10,7 @@ using ProductAPI.Database;
 
 namespace ProductAPI.Migrations
 {
-    [DbContext(typeof(ProductDbContext))]
+    [DbContext(typeof(DatabaseContext))]
     partial class ProductDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -89,8 +89,9 @@ namespace ProductAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
