@@ -20,6 +20,10 @@ namespace ProductAPI.Mappings
             CreateMap<CreateProductCommand, ProductEntity>()
                 .ForMember(et => et.Code, p => p.MapFrom(x => x.ProductCode));
 
+            CreateMap<TransactionEntity, Transaction>();
+
+            CreateMap<CreateTransactionCommand, TransactionEntity>();
+
         }
     }
 }

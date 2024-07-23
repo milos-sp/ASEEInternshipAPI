@@ -14,6 +14,6 @@ namespace ProductAPI.Database.Entities
         public DateTime AvailabilityStart { get; set; }
         public DateTime AvailabilityEnd { get; set; }
         public double Price { get; set; }
-        public string Metadata { get; set; }
+        public string? Metadata { get; set; }
     }
 }

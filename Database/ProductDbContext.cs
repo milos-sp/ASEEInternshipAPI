@@ -13,12 +13,18 @@ namespace ProductAPI.Database
 
         public DbSet<ProductEntity> Products { get; set; }
 
-       
+        public DbSet<TransactionEntity> Transactions { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(
                new ProductEntityTypeConfiguration()
                 );
+            modelBuilder.ApplyConfiguration(
+                new TransactionEntityTypeConfiguration()
+                );
+
             base.OnModelCreating(modelBuilder);
         }
     }

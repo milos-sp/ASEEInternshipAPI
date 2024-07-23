@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProductAPI.Database;
@@ -11,9 +12,11 @@ using ProductAPI.Database;
 namespace ProductAPI.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    partial class ProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240723100246_AddTransactionEntity")]
+    partial class AddTransactionEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,8 +85,7 @@ namespace ProductAPI.Migrations
 
                     b.Property<string>("BeneficiaryName")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -96,20 +98,18 @@ namespace ProductAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Direction")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Direction")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Mcc")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 #pragma warning restore 612, 618
         }

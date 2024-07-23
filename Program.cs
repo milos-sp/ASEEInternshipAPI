@@ -4,6 +4,7 @@ using ProductAPI.Database;
 using ProductAPI.Database.Repositories;
 using ProductAPI.Services;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var myLocalHostPolicy = "MyCORSPolicy";
@@ -23,13 +24,16 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 // AutoMapper definition
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options => // ovo pretvara enum u string a ne int
 {
     options.JsonSerializerOptions.Converters.Add(
-        new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase)
+        new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase) // KebabCaseLower?
         );
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower; // sredjeno da response bude kebab case
+    options.JsonSerializerOptions.WriteIndented = true;
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
