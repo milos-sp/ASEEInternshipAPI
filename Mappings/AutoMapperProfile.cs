@@ -25,6 +25,8 @@ namespace ProductAPI.Mappings
 
             CreateMap<CreateTransactionCommand, TransactionEntity>();
 
+            // CreateMap<CreateTransactionCommand, Transaction>();
+
         }
     }
 }

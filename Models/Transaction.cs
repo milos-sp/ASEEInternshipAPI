@@ -4,7 +4,7 @@
     {
         public string Id { get; set; } = string.Empty;
 
-        public string BeneficiaryName { get; set; } = string.Empty;
+        public string? BeneficiaryName { get; set; } = string.Empty;
 
         public string Date { get; set; }
 
@@ -12,11 +12,11 @@
 
         public double Amount { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
 
         public string Currency { get; set; } = string.Empty;
 
-        public int Mcc { get; set; }
+        public int? Mcc { get; set; } = null;
         public TransactionKind Kind { get; set; }
     }
 }

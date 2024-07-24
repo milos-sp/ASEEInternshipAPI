@@ -38,9 +38,12 @@ namespace ProductAPI.Controllers
         public async Task<IActionResult> InsertTransactionsAsync([FromForm] IFormFileCollection csvFile)
         {
             // bitno je staviti u postman key csvFile
-            var transactions = _csvService.ReadCSV<Transaction>(csvFile[0].OpenReadStream());
+            var transactions = _csvService.ReadCSV<CreateTransactionCommand>(csvFile[0].OpenReadStream());
+            
+            // return Ok(transactions);
+            var inserted = await _transactionService.InsertTransactions(transactions);
 
-            return Ok(transactions);
+            return Ok(inserted ? "OK - Transactions inserted" : "Not inserted");
         }
     }
 }
