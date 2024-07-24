@@ -8,6 +8,8 @@ namespace ProductAPI.Database.Repositories
 
         Task<TransactionEntity> InsertTransactionAsync(TransactionEntity transaction);
 
+        Task<int> InsertBulkTransactions(List<TransactionEntity> transactions);
+
         Task<List<TransactionEntity>> GetTransactionsAsync();
 
         Task DeleteTransactionAsync(TransactionEntity transaction);

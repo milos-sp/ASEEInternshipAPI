@@ -39,8 +39,8 @@ namespace ProductAPI.Controllers
         {
             // bitno je staviti u postman key csvFile
             var transactions = _csvService.ReadCSV<CreateTransactionCommand>(csvFile[0].OpenReadStream());
-            
-            // return Ok(transactions);
+
+            // return Ok(transactions.First());
             var inserted = await _transactionService.InsertTransactions(transactions);
 
             return Ok(inserted ? "OK - Transactions inserted" : "Not inserted");

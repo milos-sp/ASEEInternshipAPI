@@ -64,6 +64,7 @@ namespace ProductAPI.Services
         public async Task<bool> InsertTransactions(IEnumerable<CreateTransactionCommand> transactions)
         {
             int index = 1;
+            List<TransactionEntity> transactionsList = new List<TransactionEntity>();
             foreach (var transaction in transactions)
             {
                 var transactionExists = await CheckIfProductExistsAsync(transaction.Id);
@@ -92,7 +93,7 @@ namespace ProductAPI.Services
                     else
                     {
                         var newTransactionEntity = _mapper.Map<TransactionEntity>(transaction);
-                        await _repository.InsertTransactionAsync(newTransactionEntity);
+                        transactionsList.Add(newTransactionEntity);
                     }
                 }
                 else
@@ -102,6 +103,11 @@ namespace ProductAPI.Services
 
                 index++;
             }
+
+            // insert samo validnih redova
+            int count = await _repository.InsertBulkTransactions(transactionsList);
+
+            _logger.LogInformation($"Number of inserted rows: {count}");
 
             return true;
         }
