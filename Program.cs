@@ -70,7 +70,7 @@ string CreateConnectionString(IConfiguration configuration)
 {
     var username = Environment.GetEnvironmentVariable("DATABASE_USERNAME");
     var pass = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
-    var databaseName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "products";
+    var databaseName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "pfm";
     var host = Environment.GetEnvironmentVariable("DATABASE_HOST") ?? "localhost";
     var port = Environment.GetEnvironmentVariable("DATABASE_PORT") ?? "5432";
 

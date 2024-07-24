@@ -17,7 +17,7 @@ namespace ProductAPI.Commands
 
         [Required]
         // [RegularExpression(@"\d+", ErrorMessage = "Amount not in right format")]
-        public string Amount { get; set; }
+        public double Amount { get; set; }
 
         public string Description { get; set; } = string.Empty;
 
@@ -26,7 +26,7 @@ namespace ProductAPI.Commands
         [MinLength(3)]
         public string Currency { get; set; } = string.Empty;
 
-        public int Mcc { get; set; }
+        public int? Mcc { get; set; } = null;
 
         [Required]
         public TransactionKind Kind { get; set; }

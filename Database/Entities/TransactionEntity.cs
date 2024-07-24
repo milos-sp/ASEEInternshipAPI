@@ -5,7 +5,7 @@ namespace ProductAPI.Database.Entities
     public class TransactionEntity
     {
         public string Id { get; set; } = string.Empty; // valjda je string
-        public string BeneficiaryName { get; set; } = string.Empty;
+        public string? BeneficiaryName { get; set; }
 
         public string Date { get; set; } // dateonly ili string?
 
@@ -13,11 +13,11 @@ namespace ProductAPI.Database.Entities
 
         public double Amount { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         public string Currency { get; set; } = string.Empty; // min i max length su 3 po standardu
 
-        public int Mcc { get; set; }
+        public int? Mcc { get; set; }
 
         // kind je isto enum
         public TransactionKind Kind { get; set; }

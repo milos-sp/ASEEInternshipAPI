@@ -18,13 +18,13 @@ namespace ProductAPI.Database.Configurations
             builder.HasKey(x => x.Id);
             // columns
             builder.Property(x => x.Id).IsRequired();
-            builder.Property(x => x.BeneficiaryName).IsRequired().HasMaxLength(64);
+            builder.Property(x => x.BeneficiaryName).IsRequired(false).HasMaxLength(64);
             builder.Property(x => x.Date).IsRequired();
             builder.Property(x => x.Direction).HasConversion<string>().IsRequired();
             builder.Property(x => x.Amount).IsRequired();
-            builder.Property(x => x.Description);
+            builder.Property(x => x.Description).IsRequired(false);
             builder.Property(x => x.Currency).IsRequired();
-            builder.Property(x => x.Mcc);
+            builder.Property(x => x.Mcc).IsRequired(false);
             builder.Property(x => x.Kind).HasConversion<string>().IsRequired();
         }
     }

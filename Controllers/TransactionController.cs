@@ -37,6 +37,7 @@ namespace ProductAPI.Controllers
         [HttpPost("insert")]
         public async Task<IActionResult> InsertTransactionsAsync([FromForm] IFormFileCollection csvFile)
         {
+            // bitno je staviti u postman key csvFile
             var transactions = _csvService.ReadCSV<Transaction>(csvFile[0].OpenReadStream());
 
             return Ok(transactions);

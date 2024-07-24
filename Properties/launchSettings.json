@@ -19,7 +19,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "DATABASE_USERNAME": "sa",
                 "DATABASE_PASSWORD": "Password123#",
-                "DATABASE_NAME": "products",
+                "DATABASE_NAME": "pfm",
                 "DATABASE_PORT": "5433",
                 "DATABASE_HOST": "localhost"
             }
