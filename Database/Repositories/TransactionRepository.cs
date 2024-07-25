@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Extensions;
 using ProductAPI.Database.Entities;
 using ProductAPI.Models;
+using ProductAPI.Objects;
 using System;
 using System.Globalization;
 
@@ -63,32 +64,30 @@ namespace ProductAPI.Database.Repositories
             return transaction;
         }
 
-        public async Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(string? transactionKind, int page = 1, int pageSize = 10, SortOrder sortOrder = SortOrder.Asc, string? sortBy = null)
+        public async Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(QueryObject queryObject)
         {
             var query = _dbContext.Transactions.AsQueryable();
-            var totalCount = query.Count();
-            var totalPages = (int)Math.Ceiling(totalCount * 1.0 / pageSize);
 
-            if (!String.IsNullOrEmpty(transactionKind))
+            if (!String.IsNullOrEmpty(queryObject.TransactionKind))
             {
-                query = query.Where(s => s.Kind.Equals(Enum.Parse(typeof(TransactionKind), transactionKind)));
+                query = query.Where(s => s.Kind.Equals(Enum.Parse(typeof(TransactionKind), queryObject.TransactionKind)));
             }
 
-            if (!String.IsNullOrEmpty(sortBy))
+            if (!String.IsNullOrEmpty(queryObject.SortBy))
             {
-                switch (sortBy)
+                switch (queryObject.SortBy)
                 {
                     case "date":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Date) : query.OrderByDescending(x => x.Date);
+                        query = queryObject.SortOrder == SortOrder.Asc ? query.OrderBy(x => x.Date) : query.OrderByDescending(x => x.Date);
                         break;
                     case "beneficiary-name":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.BeneficiaryName) : query.OrderByDescending(x => x.BeneficiaryName);
+                        query = queryObject.SortOrder == SortOrder.Asc ? query.OrderBy(x => x.BeneficiaryName) : query.OrderByDescending(x => x.BeneficiaryName);
                         break;
                     case "description":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Description) : query.OrderByDescending(x => x.Description);
+                        query = queryObject.SortOrder == SortOrder.Asc ? query.OrderBy(x => x.Description) : query.OrderByDescending(x => x.Description);
                         break;
                     case "amount":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
+                        query = queryObject.SortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
                         break;
                 }
             }
@@ -97,7 +96,10 @@ namespace ProductAPI.Database.Repositories
                 query = query.OrderBy(x => x.BeneficiaryName);
             }
 
-            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            var totalCount = query.Count();
+            var totalPages = (int)Math.Ceiling(totalCount * 1.0 / queryObject.PageSize);
+
+            query = query.Skip((queryObject.Page - 1) * queryObject.PageSize).Take(queryObject.PageSize);
 
             var transactions = await query.ToListAsync();
 
@@ -105,10 +107,10 @@ namespace ProductAPI.Database.Repositories
             {
                 TotalPages = totalPages,
                 TotalCount = totalCount,
-                Page = page,
-                PageSize = pageSize,
-                SortBy = sortBy,
-                SortOrder = sortOrder,
+                Page = queryObject.Page,
+                PageSize = queryObject.PageSize,
+                SortBy = queryObject.SortBy,
+                SortOrder = queryObject.SortOrder,
                 Items = transactions
             };
         }

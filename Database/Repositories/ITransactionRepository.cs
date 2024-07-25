@@ -1,5 +1,6 @@
 ﻿using ProductAPI.Database.Entities;
 using ProductAPI.Models;
+using ProductAPI.Objects;
 
 namespace ProductAPI.Database.Repositories
 {
@@ -9,7 +10,7 @@ namespace ProductAPI.Database.Repositories
 
         Task<int> InsertBulkTransactions(List<TransactionEntity> transactions);
 
-        Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(string? transactionKind, int page = 1, int pageSize = 10, SortOrder sortOrder = SortOrder.Asc, string? sortBy = null);
+        Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(QueryObject queryObject);
 
         Task DeleteTransactionAsync(TransactionEntity transaction);
 

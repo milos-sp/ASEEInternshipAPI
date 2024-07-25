@@ -3,6 +3,7 @@ using ProductAPI.Commands;
 using ProductAPI.Database.Entities;
 using ProductAPI.Database.Repositories;
 using ProductAPI.Models;
+using ProductAPI.Objects;
 
 namespace ProductAPI.Services
 {
@@ -51,9 +52,9 @@ namespace ProductAPI.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedSortedList<Transaction>> GetTransactions(string? transactionKind, int page, int pageSize, SortOrder sortOrder, string? sortBy)
+        public async Task<PagedSortedList<Transaction>> GetTransactions(QueryObject queryObject)
         {
-            var transactions = await _repository.GetTransactionsAsync(transactionKind, page, pageSize, sortOrder, sortBy);
+            var transactions = await _repository.GetTransactionsAsync(queryObject);
             return _mapper.Map<PagedSortedList<Transaction>>(transactions);
         }
 

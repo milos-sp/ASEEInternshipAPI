@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductAPI.Commands;
 using ProductAPI.Models;
+using ProductAPI.Objects;
 using ProductAPI.Services;
 using ProductAPI.Validators;
 
@@ -47,16 +48,16 @@ namespace ProductAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactions([FromQuery(Name = "transaction-kind")] string? transactionKind = null, [FromQuery(Name = "start-date")] DateTime? startDate = null, [FromQuery(Name = "end-date")] DateTime? endDate = null, [FromQuery] int page = 1, [FromQuery(Name = "page-size")] int pageSize = 10, [FromQuery(Name = "sort-by")] string? sortBy = null, [FromQuery(Name = "sort-order")] SortOrder sortOrder = SortOrder.Asc)
+        public async Task<IActionResult> GetAllTransactions([FromQuery] QueryObject queryObject)
         {
-            var resp = new GetTransactionsValidator(transactionKind, startDate, endDate).ValidateParams();
+            var resp = new GetTransactionsValidator(queryObject.TransactionKind, queryObject.StartDate, queryObject.EndDate).ValidateParams();
 
             if (resp != null)
             {
                 return BadRequest(resp);
             }            
 
-            var transactions = await _transactionService.GetTransactions(transactionKind, page, pageSize, sortOrder, sortBy);
+            var transactions = await _transactionService.GetTransactions(queryObject);
 
             return Ok(transactions);
         }
