@@ -23,33 +23,31 @@ namespace ProductAPI.Mappings
                 .ForMember(et => et.Code, p => p.MapFrom(x => x.ProductCode));
 
             // mapiranja
-            /*CreateMap<TransactionEntity, Transaction>()
-                .ForMember(src => src.Date, e => e.MapFrom(dst => dst.ToString()));
-
-            CreateMap<Transaction, TransactionEntity>()
-                .ForMember(src => src.Date, e => e.MapFrom(dst => DateTime.ParseExact(dst.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture)));
 
             CreateMap<TransactionEntity, CreateTransactionCommand>()
-                .ForMember(src => src.Date, e => e.MapFrom(dst => dst.ToString()));
+                .ForMember(dst => dst.Date, e => e.MapFrom(src => src.Date.ToString("MM/dd/yyyy")));
 
             CreateMap<CreateTransactionCommand, TransactionEntity>()
-                .ForMember(src => src.Date, e => e.MapFrom(dst => DateTime.ParseExact(dst.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture)));*/
+                 .ForMember(dst => dst.Date, e => e.MapFrom(src => System.Convert.ToDateTime(src.Date, new DateTimeFormatInfo()
+                 {
+                     ShortDatePattern = "MM/dd/yyyy"
+                 })));
 
-            CreateMap<TransactionEntity, Transaction>();
+            CreateMap<TransactionEntity, Transaction>()
+                .ForMember(dst => dst.Date, e => e.MapFrom(src => src.Date.ToString("MM/dd/yyyy")));
 
-            CreateMap<Transaction, TransactionEntity>();
+            CreateMap<Transaction, TransactionEntity>()
+                 .ForMember(dst => dst.Date, e => e.MapFrom(src => System.Convert.ToDateTime(src.Date, new DateTimeFormatInfo()
+                 {
+                     ShortDatePattern = "MM/dd/yyyy"
+                 })));
 
-            CreateMap<CreateTransactionCommand, Transaction>();
+            CreateMap<CreateTransactionCommand, Transaction>().ReverseMap(); // reverse map umesto duplog mapiranja
 
-            CreateMap<Transaction, CreateTransactionCommand>();
-
-            CreateMap<CreateTransactionCommand, TransactionEntity>();
-
-            CreateMap<TransactionEntity, CreateTransactionCommand>();
+            // CreateMap<Transaction, CreateTransactionCommand>();
 
             CreateMap<PagedSortedList<TransactionEntity>, PagedSortedList<Transaction>>();
 
-            // CreateMap<CreateTransactionCommand, Transaction>();
 
         }
     }

@@ -22,7 +22,8 @@ namespace ProductAPI.Database.Repositories
             {
                 _dbContext.Transactions.Add(transaction);
                 count++;
-                if (count == 100) {
+                if (count == 100)
+                {
                     count = 0;
                     countTotal += 100;
                     // await _dbContext.SaveChangesAsync();
@@ -66,19 +67,13 @@ namespace ProductAPI.Database.Repositories
             var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling(totalCount * 1.0 / pageSize);
 
-            var transactionsE = _dbContext.Transactions;
-
-            List<TransactionEntity> lists;
 
             if (!String.IsNullOrEmpty(sortBy))
             {
                 switch (sortBy)
                 {
                     case "date":
-                        transactionsE.AsEnumerable().OrderBy(t => DateTime.ParseExact(t.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture)).ToList();
-                        // query = sortOrder == SortOrder.Asc ? query.OrderBy(x => DateTime.ParseExact(x.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture)) : query.OrderByDescending(x => DateTime.ParseExact(x.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture));
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Date) : query.OrderByDescending(x => x.Date);
-                        query = transactionsE.AsQueryable();
                         break;
                     case "beneficiary-name":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.BeneficiaryName) : query.OrderByDescending(x => x.BeneficiaryName);

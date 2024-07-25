@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProductAPI.Database;
@@ -12,11 +11,9 @@ using ProductAPI.Database;
 namespace ProductAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240723102921_AddTransactionEntityCheck")]
-    partial class AddTransactionEntityCheck
+    partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +81,6 @@ namespace ProductAPI.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("BeneficiaryName")
-                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
@@ -92,11 +88,10 @@ namespace ProductAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Direction")
@@ -107,7 +102,7 @@ namespace ProductAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Mcc")
+                    b.Property<int?>("Mcc")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

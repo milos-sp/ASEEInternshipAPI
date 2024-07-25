@@ -9,7 +9,7 @@ namespace ProductAPI.Database
     {
         public DatabaseContext(DbContextOptions options) : base(options)
         {
-            
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public DbSet<ProductEntity> Products { get; set; }

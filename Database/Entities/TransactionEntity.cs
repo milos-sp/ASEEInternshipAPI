@@ -4,10 +4,10 @@ namespace ProductAPI.Database.Entities
 {
     public class TransactionEntity
     {
-        public string Id { get; set; } = string.Empty; // valjda je string
+        public string Id { get; set; } = string.Empty; // jeste string
         public string? BeneficiaryName { get; set; }
 
-        public string Date { get; set; } // dateonly ili string?
+        public DateTime Date { get; set; } // ipak datetime zbog sortiranja
 
         public Directions Direction { get; set; } // d ili c
 
