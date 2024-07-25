@@ -23,6 +23,10 @@ namespace ProductAPI.Services
                 {
                     _logger.LogInformation($"Field with names ['{string.Join("', '", args.HeaderNames)}'] at index '{args.Index}' was not found. ");
                 }
+                /*ReadingExceptionOccurred = args =>
+                {
+                    return false; // mozda probati sa ovim
+                }*/
             }; // bilo je bitno odraditi replace
             var reader = new StreamReader(file);
             var csv = new CsvReader(reader, config);

@@ -40,10 +40,17 @@ namespace ProductAPI.Controllers
             // bitno je staviti u postman key csvFile
             var transactions = _csvService.ReadCSV<CreateTransactionCommand>(csvFile[0].OpenReadStream());
 
-            // return Ok(transactions.First());
             var inserted = await _transactionService.InsertTransactions(transactions);
 
             return Ok(inserted ? "OK - Transactions inserted" : "Not inserted");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTransactions([FromQuery] int page = 1, [FromQuery(Name = "page-size")] int pageSize = 10, [FromQuery(Name = "sort-by")] string? sortBy = null, [FromQuery(Name = "sort-order")] SortOrder sortOrder = SortOrder.Asc)
+        {
+            var transactions = await _transactionService.GetTransactions(page, pageSize, sortOrder, sortBy);
+
+            return Ok(transactions);
         }
     }
 }

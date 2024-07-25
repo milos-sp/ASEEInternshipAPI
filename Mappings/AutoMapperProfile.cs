@@ -2,6 +2,7 @@
 using ProductAPI.Commands;
 using ProductAPI.Database.Entities;
 using ProductAPI.Models;
+using System.Globalization;
 using System.Text.RegularExpressions;
 namespace ProductAPI.Mappings
 {
@@ -21,9 +22,32 @@ namespace ProductAPI.Mappings
             CreateMap<CreateProductCommand, ProductEntity>()
                 .ForMember(et => et.Code, p => p.MapFrom(x => x.ProductCode));
 
+            // mapiranja
+            /*CreateMap<TransactionEntity, Transaction>()
+                .ForMember(src => src.Date, e => e.MapFrom(dst => dst.ToString()));
+
+            CreateMap<Transaction, TransactionEntity>()
+                .ForMember(src => src.Date, e => e.MapFrom(dst => DateTime.ParseExact(dst.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture)));
+
+            CreateMap<TransactionEntity, CreateTransactionCommand>()
+                .ForMember(src => src.Date, e => e.MapFrom(dst => dst.ToString()));
+
+            CreateMap<CreateTransactionCommand, TransactionEntity>()
+                .ForMember(src => src.Date, e => e.MapFrom(dst => DateTime.ParseExact(dst.Date, "mm/dd/yyyy", CultureInfo.InvariantCulture)));*/
+
             CreateMap<TransactionEntity, Transaction>();
 
+            CreateMap<Transaction, TransactionEntity>();
+
+            CreateMap<CreateTransactionCommand, Transaction>();
+
+            CreateMap<Transaction, CreateTransactionCommand>();
+
             CreateMap<CreateTransactionCommand, TransactionEntity>();
+
+            CreateMap<TransactionEntity, CreateTransactionCommand>();
+
+            CreateMap<PagedSortedList<TransactionEntity>, PagedSortedList<Transaction>>();
 
             // CreateMap<CreateTransactionCommand, Transaction>();
 
