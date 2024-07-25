@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
 using ProductAPI.Database.Entities;
 using ProductAPI.Models;
+using System;
 using System.Globalization;
 
 namespace ProductAPI.Database.Repositories
@@ -61,12 +63,16 @@ namespace ProductAPI.Database.Repositories
             return transaction;
         }
 
-        public async Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(int page = 1, int pageSize = 10, SortOrder sortOrder = SortOrder.Asc, string? sortBy = null)
+        public async Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(string? transactionKind, int page = 1, int pageSize = 10, SortOrder sortOrder = SortOrder.Asc, string? sortBy = null)
         {
             var query = _dbContext.Transactions.AsQueryable();
             var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling(totalCount * 1.0 / pageSize);
 
+            if (!String.IsNullOrEmpty(transactionKind))
+            {
+                query = query.Where(s => s.Kind.Equals(Enum.Parse(typeof(TransactionKind), transactionKind)));
+            }
 
             if (!String.IsNullOrEmpty(sortBy))
             {

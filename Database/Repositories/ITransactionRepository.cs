@@ -9,7 +9,7 @@ namespace ProductAPI.Database.Repositories
 
         Task<int> InsertBulkTransactions(List<TransactionEntity> transactions);
 
-        Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(int page = 1, int pageSize = 10, SortOrder sortOrder = SortOrder.Asc, string? sortBy = null);
+        Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(string? transactionKind, int page = 1, int pageSize = 10, SortOrder sortOrder = SortOrder.Asc, string? sortBy = null);
 
         Task DeleteTransactionAsync(TransactionEntity transaction);
 

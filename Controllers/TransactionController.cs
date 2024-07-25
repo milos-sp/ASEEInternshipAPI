@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductAPI.Commands;
 using ProductAPI.Models;
 using ProductAPI.Services;
+using ProductAPI.Validators;
 
 namespace ProductAPI.Controllers
 {
@@ -22,7 +23,7 @@ namespace ProductAPI.Controllers
             _csvService = csvService;
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> InsertTransactionAsync([FromBody] CreateTransactionCommand createTransactionCommand)
         {
             var transaction = await _transactionService.CreateTransaction(createTransactionCommand);
@@ -32,7 +33,7 @@ namespace ProductAPI.Controllers
             }
 
             return Ok(transaction);
-        }
+        }*/
 
         [HttpPost("insert")]
         public async Task<IActionResult> InsertTransactionsAsync([FromForm] IFormFileCollection csvFile)
@@ -46,9 +47,16 @@ namespace ProductAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactions([FromQuery] int page = 1, [FromQuery(Name = "page-size")] int pageSize = 10, [FromQuery(Name = "sort-by")] string? sortBy = null, [FromQuery(Name = "sort-order")] SortOrder sortOrder = SortOrder.Asc)
+        public async Task<IActionResult> GetAllTransactions([FromQuery(Name = "transaction-kind")] string? transactionKind = null, [FromQuery(Name = "start-date")] DateTime? startDate = null, [FromQuery(Name = "end-date")] DateTime? endDate = null, [FromQuery] int page = 1, [FromQuery(Name = "page-size")] int pageSize = 10, [FromQuery(Name = "sort-by")] string? sortBy = null, [FromQuery(Name = "sort-order")] SortOrder sortOrder = SortOrder.Asc)
         {
-            var transactions = await _transactionService.GetTransactions(page, pageSize, sortOrder, sortBy);
+            var resp = new GetTransactionsValidator(transactionKind, startDate, endDate).ValidateParams();
+
+            if (resp != null)
+            {
+                return BadRequest(resp);
+            }            
+
+            var transactions = await _transactionService.GetTransactions(transactionKind, page, pageSize, sortOrder, sortBy);
 
             return Ok(transactions);
         }

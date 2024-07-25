@@ -51,9 +51,9 @@ namespace ProductAPI.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedSortedList<Transaction>> GetTransactions(int page, int pageSize, SortOrder sortOrder, string? sortBy)
+        public async Task<PagedSortedList<Transaction>> GetTransactions(string? transactionKind, int page, int pageSize, SortOrder sortOrder, string? sortBy)
         {
-            var transactions = await _repository.GetTransactionsAsync(page, pageSize, sortOrder, sortBy);
+            var transactions = await _repository.GetTransactionsAsync(transactionKind, page, pageSize, sortOrder, sortBy);
             return _mapper.Map<PagedSortedList<Transaction>>(transactions);
         }
 
