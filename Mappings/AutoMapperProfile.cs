@@ -11,17 +11,6 @@ namespace ProductAPI.Mappings
 
         public AutoMapperProfile()
         {
-            CreateMap<ProductEntity, Product>()
-                .ForMember(p => p.ProductCode, e => e.MapFrom(x => x.Code));
-
-            CreateMap<Product, ProductEntity>()
-                .ForMember(et => et.Code, p => p.MapFrom(x => x.ProductCode));
-
-            CreateMap<PagedSortedList<ProductEntity>, PagedSortedList<Product>>();
-
-            CreateMap<CreateProductCommand, ProductEntity>()
-                .ForMember(et => et.Code, p => p.MapFrom(x => x.ProductCode));
-
             // mapiranja
 
             CreateMap<TransactionEntity, CreateTransactionCommand>()

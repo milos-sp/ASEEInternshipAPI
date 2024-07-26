@@ -12,16 +12,11 @@ namespace ProductAPI.Database
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        public DbSet<ProductEntity> Products { get; set; }
-
         public DbSet<TransactionEntity> Transactions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(
-               new ProductEntityTypeConfiguration()
-                );
             modelBuilder.ApplyConfiguration(
                 new TransactionEntityTypeConfiguration()
                 );
