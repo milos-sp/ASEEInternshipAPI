@@ -30,7 +30,35 @@ namespace ProductAPI.Validators
                     resp.Message = $"Validation error: {_transactionKind} is not regular transaction kind";
 
                     return resp;
-                }  
+                }
+            }
+
+            if( _startDate != null)
+            {
+                var regex = @"([1-9]|1[012])[- /.]([1-9]|[12][0-9]|3[01])[- /.](19|20)[0-9]{2}";
+                if (!Regex.IsMatch(_startDate.ToString(), regex))
+                {
+                    var resp = new ValidatorErrorResponse();
+                    resp.Tag = "start-date";
+                    resp.Error = PascalCaseToKebabCase(ErrorEnum.InvalidFormat.ToString());
+                    resp.Message = $"Validation error: Start date is in bad format";
+
+                    return resp;
+                }
+            }
+
+            if (_endDate != null)
+            {
+                var regex = @"([1-9]|1[012])[- /.]([1-9]|[12][0-9]|3[01])[- /.](19|20)[0-9]{2}";
+                if (!Regex.IsMatch(_endDate.ToString(), regex))
+                {
+                    var resp = new ValidatorErrorResponse();
+                    resp.Tag = "end-date";
+                    resp.Error = PascalCaseToKebabCase(ErrorEnum.InvalidFormat.ToString());
+                    resp.Message = $"Validation error: End date is in bad format";
+
+                    return resp;
+                }
             }
 
             return null;

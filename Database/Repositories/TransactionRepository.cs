@@ -73,6 +73,16 @@ namespace ProductAPI.Database.Repositories
                 query = query.Where(s => s.Kind.Equals(Enum.Parse(typeof(TransactionKind), queryObject.TransactionKind)));
             }
 
+            if(queryObject.StartDate != null)
+            {
+                query = query.Where(s => s.Date >= queryObject.StartDate);
+            }
+
+            if (queryObject.EndDate != null)
+            {
+                query = query.Where(s => s.Date <= queryObject.EndDate);
+            }
+
             if (!String.IsNullOrEmpty(queryObject.SortBy))
             {
                 switch (queryObject.SortBy)
