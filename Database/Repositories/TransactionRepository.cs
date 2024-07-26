@@ -85,7 +85,9 @@ namespace ProductAPI.Database.Repositories
 
             if (!String.IsNullOrEmpty(queryObject.SortBy))
             {
-                switch (queryObject.SortBy)
+                List<string> filters = queryObject.SortBy.Split(',').ToList();
+                
+                switch (filters.ElementAt(0)) // prvo sortira po polju koje postoji da bi se dobio ordered queryable
                 {
                     case "date":
                         query = queryObject.SortOrder == SortOrder.Asc ? query.OrderBy(x => x.Date) : query.OrderByDescending(x => x.Date);
@@ -99,6 +101,26 @@ namespace ProductAPI.Database.Repositories
                     case "amount":
                         query = queryObject.SortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
                         break;
+                }
+                filters.RemoveAt(0); // vec sortirano
+                
+                foreach (string filter in filters) {
+                    var orderedQuery = query as IOrderedQueryable<TransactionEntity>;
+                    switch (filter)
+                    {
+                        case "date":
+                            query = queryObject.SortOrder == SortOrder.Asc ? orderedQuery.ThenBy(x => x.Date) : orderedQuery.ThenByDescending(x => x.Date);
+                            break;
+                        case "beneficiary-name":
+                            query = queryObject.SortOrder == SortOrder.Asc ? orderedQuery.ThenBy(x => x.BeneficiaryName) : orderedQuery.ThenByDescending(x => x.BeneficiaryName);
+                            break;
+                        case "description":
+                            query = queryObject.SortOrder == SortOrder.Asc ? orderedQuery.ThenBy(x => x.Description) : orderedQuery.ThenByDescending(x => x.Description);
+                            break;
+                        case "amount":
+                            query = queryObject.SortOrder == SortOrder.Asc ? orderedQuery.ThenBy(x => x.Amount) : orderedQuery.ThenByDescending(x => x.Amount);
+                            break;
+                    }
                 }
             }
             else
