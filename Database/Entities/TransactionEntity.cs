@@ -22,5 +22,11 @@ namespace ProductAPI.Database.Entities
         // kind je isto enum
         public TransactionKind Kind { get; set; }
 
+        // strani kljuc kategorije
+
+        public string? Catcode { get; set; }
+
+        public CategoryEntity Category { get; set; } // navigation property
+
     }
 }

@@ -18,5 +18,7 @@
 
         public int? Mcc { get; set; } = null;
         public TransactionKind Kind { get; set; }
+
+        public string? Catcode { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace ProductAPI.Database.Configurations
             builder.Property(x => x.Currency).IsRequired();
             builder.Property(x => x.Mcc).IsRequired(false);
             builder.Property(x => x.Kind).HasConversion<string>().IsRequired();
+            builder.Property(x => x.Catcode).IsRequired(false);
         }
     }
 }
