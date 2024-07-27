@@ -33,11 +33,15 @@ namespace ProductAPI.Mappings
 
             CreateMap<CreateTransactionCommand, Transaction>().ReverseMap(); // reverse map umesto duplog mapiranja
 
-            // CreateMap<Transaction, CreateTransactionCommand>();
-
             CreateMap<PagedSortedList<TransactionEntity>, PagedSortedList<Transaction>>();
 
+            // kategorije
 
+            CreateMap<CreateCategoryCommand, CategoryEntity>().ReverseMap();
+
+            CreateMap<CreateCategoryCommand, Category>().ReverseMap();
+
+            CreateMap<CategoryEntity, Category>().ReverseMap();
         }
     }
 }

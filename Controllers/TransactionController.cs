@@ -36,7 +36,7 @@ namespace ProductAPI.Controllers
             return Ok(transaction);
         }*/
 
-        [HttpPost("insert")]
+        [HttpPost("import")]
         public async Task<IActionResult> InsertTransactionsAsync([FromForm] IFormFileCollection csvFile)
         {
             // bitno je staviti u postman key csvFile

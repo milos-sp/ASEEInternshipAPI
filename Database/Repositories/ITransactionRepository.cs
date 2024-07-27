@@ -12,8 +12,6 @@ namespace ProductAPI.Database.Repositories
 
         Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(QueryObject queryObject);
 
-        Task DeleteTransactionAsync(TransactionEntity transaction);
-
         Task<TransactionEntity> GetTransactionByIdAsync(string transactionId);
     }
 }

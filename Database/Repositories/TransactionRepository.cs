@@ -41,19 +41,9 @@ namespace ProductAPI.Database.Repositories
             return countTotal;
         }
 
-        public Task DeleteTransactionAsync(TransactionEntity transaction)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<TransactionEntity> GetTransactionByIdAsync(string transactionId)
         {
             return await _dbContext.Transactions.FirstOrDefaultAsync(t => t.Id.Equals(transactionId));
-        }
-
-        public Task<List<TransactionEntity>> GetTransactionsAsync()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<TransactionEntity> InsertTransactionAsync(TransactionEntity transaction)
