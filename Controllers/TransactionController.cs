@@ -61,5 +61,12 @@ namespace ProductAPI.Controllers
 
             return Ok(transactions);
         }
+
+        [HttpPost("{id}/categorize")]
+        public async Task<IActionResult> CategorizeTransaction([FromRoute] string id, [FromBody] CategoryCode catCode)
+        {
+
+            return Ok("Transaction categorized");
+        }
     }
 }

@@ -2,6 +2,7 @@
 using ProductAPI.Commands;
 using ProductAPI.Database.Entities;
 using ProductAPI.Database.Repositories;
+using ProductAPI.Models;
 
 namespace ProductAPI.Services
 {
@@ -67,6 +68,13 @@ namespace ProductAPI.Services
             // _logger.LogInformation($"Number of inserted rows: {count}");
 
             return true;
+        }
+
+        public async Task<List<Category>> GetAllCategories(string parentCode)
+        {
+            var transactions = await _repository.GetAllCategoriesAsync(parentCode);
+
+            return _mapper.Map<List<Category>>(transactions);
         }
     }
 }

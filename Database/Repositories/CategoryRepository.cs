@@ -12,6 +12,21 @@ namespace ProductAPI.Database.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public async Task<List<CategoryEntity>> GetAllCategoriesAsync(string parentCode)
+        {
+            var query = _dbContext.Categories.AsQueryable();
+
+            if (!String.IsNullOrEmpty(parentCode))
+            {
+                query = query.Where(s => s.ParentCode.Equals(parentCode));
+            }
+
+            var categories = await query.ToListAsync();
+
+            return categories;
+        }
+
         public async Task<CategoryEntity> GetCategoryByCodeAsync(string code)
         {
             return await _dbContext.Categories.FirstOrDefaultAsync(c => c.Code.Equals(code));

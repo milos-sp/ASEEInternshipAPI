@@ -35,5 +35,14 @@ namespace ProductAPI.Controllers
            return Ok(inserted ? "OK - Categories inserted" : "Not inserted");
         }
 
+        [HttpGet]
+
+        public async Task<IActionResult> GetCategories([FromQuery(Name = "parent-code")] string? ParentCode)
+        {
+            var categories = await _categoryService.GetAllCategories(ParentCode);
+
+            return Ok(categories);
+        }
+
     }
 }

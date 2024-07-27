@@ -12,5 +12,7 @@ namespace ProductAPI.Database.Repositories
         Task<CategoryEntity?> UpdateCategoryAsync(CreateCategoryCommand category);
 
         Task<CategoryEntity> InsertCategoryAsync(CategoryEntity category);
+
+        Task<List<CategoryEntity>> GetAllCategoriesAsync(string parentCode);
     }
 }
