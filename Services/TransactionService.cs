@@ -58,9 +58,10 @@ namespace ProductAPI.Services
             return _mapper.Map<PagedSortedList<Transaction>>(transactions);
         }
 
-        public Task<Transaction> GetTransaction(string id)
+        public async Task<Transaction> GetTransaction(string id)
         {
-            throw new NotImplementedException();
+            var transaction = await _repository.GetTransactionByIdAsync(id);
+            return _mapper.Map<Transaction>(transaction);
         }
 
         public async Task<bool> InsertTransactions(IEnumerable<CreateTransactionCommand> transactions)
@@ -112,6 +113,12 @@ namespace ProductAPI.Services
             _logger.LogInformation($"Number of inserted rows: {count}");
 
             return true;
+        }
+
+        public async Task<Transaction> UpdateCategory(string id, string catcode)
+        {
+            var transaction = await _repository.UpdateCategoryAsync(id, catcode);
+            return _mapper.Map<Transaction>(transaction);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace ProductAPI.Database.Repositories
 
         Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(QueryObject queryObject);
 
-        Task<TransactionEntity> GetTransactionByIdAsync(string transactionId);
+        Task<TransactionEntity?> GetTransactionByIdAsync(string transactionId);
+
+        Task<TransactionEntity?> UpdateCategoryAsync(string transactionId, string catcode);
     }
 }

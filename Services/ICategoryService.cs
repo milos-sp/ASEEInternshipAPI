@@ -10,5 +10,7 @@ namespace ProductAPI.Services
 
         Task<List<Category>> GetAllCategories(string parentCode);
 
+        Task<Category> GetCategoryByCode(string code);
+
     }
 }

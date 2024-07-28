@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ProductAPI.Validators
 {
-    public class GetTransactionsValidator
+    public class GetTransactionsValidator : IValidator
     {
         private string? _transactionKind;
 
@@ -18,8 +18,10 @@ namespace ProductAPI.Validators
             _endDate = endDate;
         }
 
-        public ValidatorErrorResponse? ValidateParams()
+        public List<ValidatorErrorResponse>? ValidateParams()
         {
+            List<ValidatorErrorResponse> errors = new List<ValidatorErrorResponse>();
+
             if (_transactionKind != null)
             {
                 if (!Enum.IsDefined(typeof(TransactionKind), _transactionKind))
@@ -29,7 +31,7 @@ namespace ProductAPI.Validators
                     resp.Error = PascalCaseToKebabCase(ErrorEnum.UnknownEnum.ToString());
                     resp.Message = $"Validation error: {_transactionKind} is not regular transaction kind";
 
-                    return resp;
+                    errors.Add(resp);
                 }
             }
 
@@ -43,7 +45,7 @@ namespace ProductAPI.Validators
                     resp.Error = PascalCaseToKebabCase(ErrorEnum.InvalidFormat.ToString());
                     resp.Message = $"Validation error: Start date is in bad format";
 
-                    return resp;
+                    errors.Add(resp);
                 }
             }
 
@@ -57,11 +59,11 @@ namespace ProductAPI.Validators
                     resp.Error = PascalCaseToKebabCase(ErrorEnum.InvalidFormat.ToString());
                     resp.Message = $"Validation error: End date is in bad format";
 
-                    return resp;
+                    errors.Add(resp);
                 }
             }
 
-            return null;
+            return errors.Count() == 0 ? null : errors;
         }
 
         private string PascalCaseToKebabCase(string value)

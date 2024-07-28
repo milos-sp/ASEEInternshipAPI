@@ -11,5 +11,7 @@ namespace ProductAPI.Services
         Task<bool> DeleteTransaction(string id);
         Task<Transaction> GetTransaction(string id);
         Task<PagedSortedList<Transaction>> GetTransactions(QueryObject queryObject);
+
+        Task<Transaction> UpdateCategory(string id, string catcode);
     }
 }

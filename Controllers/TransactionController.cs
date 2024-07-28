@@ -17,24 +17,15 @@ namespace ProductAPI.Controllers
         private readonly ITransactionService _transactionService;
         private readonly ILogger<TransactionController> _logger;
         private readonly ICSVService _csvService;
-        public TransactionController(ILogger<TransactionController> logger, ITransactionService transactionService, ICSVService csvService)
+        // za proveru postoji li kategorija
+        private readonly ICategoryService _categoryService;
+        public TransactionController(ILogger<TransactionController> logger, ITransactionService transactionService, ICSVService csvService, ICategoryService categoryService)
         {
             _logger = logger;
             _transactionService = transactionService;
             _csvService = csvService;
+            _categoryService = categoryService;
         }
-
-        /*[HttpPost]
-        public async Task<IActionResult> InsertTransactionAsync([FromBody] CreateTransactionCommand createTransactionCommand)
-        {
-            var transaction = await _transactionService.CreateTransaction(createTransactionCommand);
-            if(transaction == null)
-            {
-                return BadRequest("Transaction already exists. Id: " + createTransactionCommand.Id);
-            }
-
-            return Ok(transaction);
-        }*/
 
         [HttpPost("import")]
         public async Task<IActionResult> InsertTransactionsAsync([FromForm] IFormFileCollection csvFile)
@@ -54,7 +45,7 @@ namespace ProductAPI.Controllers
 
             if (resp != null)
             {
-                return BadRequest(resp);
+                return BadRequest(new { errors = resp } );
             }            
 
             var transactions = await _transactionService.GetTransactions(queryObject);
@@ -63,8 +54,25 @@ namespace ProductAPI.Controllers
         }
 
         [HttpPost("{id}/categorize")]
-        public async Task<IActionResult> CategorizeTransaction([FromRoute] string id, [FromBody] CategoryCode catCode)
+        public async Task<IActionResult> CategorizeTransaction([FromRoute] string id, [FromBody] CategoryCode catcode)
         {
+            var validator = new CategorizeTransactionValidator(id, catcode, _transactionService, _categoryService);
+            var resp = validator.ValidateParams();
+
+            if (resp != null)
+            {
+                return BadRequest(new { errors = resp} );
+            }
+
+            // ako su parametri ok, treba proveriti da li postoje transakcija i kategorija
+            var err = await validator.CheckIfExists(id, catcode.Catcode);
+
+            if (err != null)
+            {
+                return StatusCode(440, err);
+            }
+
+            var transaction = await _transactionService.UpdateCategory(id, catcode.Catcode);
 
             return Ok("Transaction categorized");
         }

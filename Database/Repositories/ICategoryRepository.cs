@@ -7,7 +7,7 @@ namespace ProductAPI.Database.Repositories
     {
         Task<int> InsertBulkCategories(List<CategoryEntity> categories);
 
-        Task<CategoryEntity> GetCategoryByCodeAsync(string code);
+        Task<CategoryEntity?> GetCategoryByCodeAsync(string code);
 
         Task<CategoryEntity?> UpdateCategoryAsync(CreateCategoryCommand category);
 

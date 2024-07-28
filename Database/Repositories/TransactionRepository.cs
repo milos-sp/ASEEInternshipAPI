@@ -41,7 +41,7 @@ namespace ProductAPI.Database.Repositories
             return countTotal;
         }
 
-        public async Task<TransactionEntity> GetTransactionByIdAsync(string transactionId)
+        public async Task<TransactionEntity?> GetTransactionByIdAsync(string transactionId)
         {
             return await _dbContext.Transactions.FirstOrDefaultAsync(t => t.Id.Equals(transactionId));
         }
@@ -135,6 +135,21 @@ namespace ProductAPI.Database.Repositories
                 SortOrder = queryObject.SortOrder,
                 Items = transactions
             };
+        }
+
+        public async Task<TransactionEntity?> UpdateCategoryAsync(string transactionId, string catcode)
+        {
+            var existingTransaction = await _dbContext.Transactions.FirstOrDefaultAsync(x => x.Id.Equals(transactionId));
+
+            if (existingTransaction != null)
+            {
+                existingTransaction.Catcode = catcode;
+                await _dbContext.SaveChangesAsync();
+                return existingTransaction;
+            } else
+            {
+                return null;
+            }
         }
     }
 }

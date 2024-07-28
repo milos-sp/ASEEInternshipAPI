@@ -72,9 +72,15 @@ namespace ProductAPI.Services
 
         public async Task<List<Category>> GetAllCategories(string parentCode)
         {
-            var transactions = await _repository.GetAllCategoriesAsync(parentCode);
+            var categories = await _repository.GetAllCategoriesAsync(parentCode);
 
-            return _mapper.Map<List<Category>>(transactions);
+            return _mapper.Map<List<Category>>(categories);
+        }
+
+        public async Task<Category> GetCategoryByCode(string code)
+        {
+            var category = await _repository.GetCategoryByCodeAsync(code);
+            return _mapper.Map<Category>(category);
         }
     }
 }

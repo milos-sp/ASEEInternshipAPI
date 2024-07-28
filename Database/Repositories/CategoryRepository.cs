@@ -27,7 +27,7 @@ namespace ProductAPI.Database.Repositories
             return categories;
         }
 
-        public async Task<CategoryEntity> GetCategoryByCodeAsync(string code)
+        public async Task<CategoryEntity?> GetCategoryByCodeAsync(string code)
         {
             return await _dbContext.Categories.FirstOrDefaultAsync(c => c.Code.Equals(code));
         }
