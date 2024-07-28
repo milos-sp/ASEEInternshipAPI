@@ -13,5 +13,7 @@ namespace ProductAPI.Services
         Task<PagedSortedList<Transaction>> GetTransactions(QueryObject queryObject);
 
         Task<Transaction> UpdateCategory(string id, string catcode);
+
+        Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject);
     }
 }

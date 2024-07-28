@@ -120,5 +120,12 @@ namespace ProductAPI.Services
             var transaction = await _repository.UpdateCategoryAsync(id, catcode);
             return _mapper.Map<Transaction>(transaction);
         }
+
+        public async Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject)
+        {
+            var analytics = await _repository.GetSpendingAnalytics(queryObject);
+
+            return analytics;
+        }
     }
 }

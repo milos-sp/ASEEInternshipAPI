@@ -151,5 +151,46 @@ namespace ProductAPI.Database.Repositories
                 return null;
             }
         }
+
+        public async Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject)
+        {
+            var query = _dbContext.Transactions.Where(x => !String.IsNullOrEmpty(x.Catcode));
+
+            if (!String.IsNullOrEmpty(queryObject.Catcode))
+            {
+                query = query.Where(x => x.Catcode.Equals(queryObject.Catcode)); // ako treba prikazati analitiku samo za jednu kategoriju
+            }
+
+            if(queryObject.Direction != null)
+            {
+                query = query.Where(x => x.Direction.Equals(queryObject.Direction));
+            }
+
+            if(queryObject.StartDate != null)
+            {
+                query = query.Where(x => x.Date >=  queryObject.StartDate);
+            }
+
+            if (queryObject.EndDate != null)
+            {
+                query = query.Where(x => x.Date <= queryObject.EndDate);
+            }
+
+            var analyticsSub = await query.GroupBy(x => x.Catcode).Select(g => new AnalyticsObject
+            {
+                Catcode = g.Key,
+                Amount = g.Sum(e => e.Amount),
+                Count = g.Count()
+            }).ToListAsync();
+
+            var analyticsTop = await query.GroupBy(x => x.Category.ParentCode).Select(g => new AnalyticsObject
+            {
+                Catcode = g.Key,
+                Amount = g.Sum(e => e.Amount),
+                Count = g.Count()
+            }).ToListAsync();
+
+            return analyticsSub.Concat(analyticsTop).ToList();
+        }
     }
 }
