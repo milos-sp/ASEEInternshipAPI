@@ -17,6 +17,8 @@ namespace ProductAPI.Database
 
         public DbSet<CategoryEntity> Categories { get; set; }
 
+        public DbSet<SplitEntity> Splits { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,11 +30,23 @@ namespace ProductAPI.Database
                 new CategoryEntityTypeConfiguration()
             );
 
+            modelBuilder.ApplyConfiguration(
+                new SplitEntityTypeConfiguration()
+            );
+
             modelBuilder.Entity<CategoryEntity>()
                .HasMany(e => e.Transactions)
                .WithOne(e => e.Category)
                .HasForeignKey(e => e.Catcode)
                .IsRequired(false);
+
+            modelBuilder.Entity<TransactionEntity>()
+                .HasMany(e => e.Splits)
+                .WithOne(e => e.Transaction)
+                .HasForeignKey(e => e.TransactionId)
+                .IsRequired(true);
+
+            // modelBuilder.UseIdentityColumns();
 
             base.OnModelCreating(modelBuilder);
         }

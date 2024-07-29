@@ -42,6 +42,14 @@ namespace ProductAPI.Mappings
             CreateMap<CreateCategoryCommand, Category>().ReverseMap();
 
             CreateMap<CategoryEntity, Category>().ReverseMap();
+
+            // splitovi
+
+            CreateMap<SplitEntity, Split>().ReverseMap();
+
+            CreateMap<SplitTransactionCommand, SplitEntity>().ReverseMap();
+
+            CreateMap<Split, SplitTransactionCommand>().ReverseMap();
         }
     }
 }

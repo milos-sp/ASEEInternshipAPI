@@ -17,5 +17,6 @@ namespace ProductAPI.Database.Repositories
         Task<TransactionEntity?> UpdateCategoryAsync(string transactionId, string catcode);
 
         Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject);
+
     }
 }

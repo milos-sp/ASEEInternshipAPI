@@ -56,7 +56,7 @@ namespace ProductAPI.Database.Repositories
 
         public async Task<PagedSortedList<TransactionEntity>> GetTransactionsAsync(QueryObject queryObject)
         {
-            var query = _dbContext.Transactions.AsQueryable();
+            var query = _dbContext.Transactions.Include(t => t.Splits).AsQueryable();
 
             if (!String.IsNullOrEmpty(queryObject.TransactionKind))
             {
@@ -122,7 +122,7 @@ namespace ProductAPI.Database.Repositories
             var totalPages = (int)Math.Ceiling(totalCount * 1.0 / queryObject.PageSize);
 
             query = query.Skip((queryObject.Page - 1) * queryObject.PageSize).Take(queryObject.PageSize);
-
+            
             var transactions = await query.ToListAsync();
 
             return new PagedSortedList<TransactionEntity>
