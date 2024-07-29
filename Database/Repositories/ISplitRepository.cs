@@ -7,5 +7,9 @@ namespace ProductAPI.Database.Repositories
     {
         public Task<bool> SplitTransaction(string id, List<SplitEntity> splits);
 
+        Task<bool> IsSplittedTransaction(string id);
+
+        Task<bool> DeleteSplitsForTransaction(string id);
+
     }
 }

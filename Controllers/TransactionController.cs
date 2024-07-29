@@ -121,6 +121,13 @@ namespace ProductAPI.Controllers
                 return StatusCode(440, err);
             }
 
+            // ako je transakcija vec splitovana, obrisati splitove pa ponovo splitovati
+
+            if (await _splitService.IsSplittedTransaction(id))
+            {
+                await _splitService.DeleteSplitsForTransaction(id);
+            }
+
             await _splitService.SplitTransaction(id, splits);
 
             return Ok("OK - Transaction splitted");

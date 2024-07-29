@@ -18,6 +18,17 @@ namespace ProductAPI.Services
             _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<bool> DeleteSplitsForTransaction(string id)
+        {
+            return await _repository.DeleteSplitsForTransaction(id);
+        }
+
+        public async Task<bool> IsSplittedTransaction(string id)
+        {
+            return await _repository.IsSplittedTransaction(id);
+        }
+
         public async Task<bool> SplitTransaction(string id, List<SplitTransactionCommand> splits)
         {
             return await _repository.SplitTransaction(id, _mapper.Map<List<SplitEntity>>(splits));
