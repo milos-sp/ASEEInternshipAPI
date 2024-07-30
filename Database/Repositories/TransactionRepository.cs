@@ -164,13 +164,18 @@ namespace ProductAPI.Database.Repositories
         public async Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject)
         {
             var query = _dbContext.Transactions.Where(x => !String.IsNullOrEmpty(x.Catcode));
-
+            var setTop = new HashSet<string?>();
             if (!String.IsNullOrEmpty(queryObject.Catcode))
             {
-                query = query.Where(x => x.Catcode.Equals(queryObject.Catcode)); // ako treba prikazati analitiku samo za jednu kategoriju
+                query = query.Where(x => x.Catcode.Equals(queryObject.Catcode) || x.Category.ParentCode.Equals(queryObject.Catcode)); // ako treba prikazati analitiku samo za jednu kategoriju
+            }
+            else
+            {
+                // samo top level za sve kategorije
+                setTop = _dbContext.Transactions.Where(x => x.Category.ParentCode.Equals("")).Select(x => x.Catcode).ToHashSet();
             }
 
-            if(queryObject.Direction != null)
+            if (queryObject.Direction != null)
             {
                 query = query.Where(x => x.Direction.Equals(queryObject.Direction));
             }
@@ -185,22 +190,70 @@ namespace ProductAPI.Database.Repositories
                 query = query.Where(x => x.Date <= queryObject.EndDate);
             }
 
-            var analyticsSub = await query.GroupBy(x => x.Catcode).Select(g => new AnalyticsObject
-            {
-                Catcode = g.Key,
-                Amount = g.Sum(e => e.Amount),
-                Count = g.Count()
-            }).ToListAsync(); // ako se navede category(top-level) onda njega i sve koji imaju njega za parent
-                              // ako se ne navede samo sve top-level (ali moralo bi da uzme u obzir i one kojima je postavljen top-level)
+            Dictionary<string, AnalyticsObject> analytics = new Dictionary<string, AnalyticsObject>();
 
-            var analyticsTop = await query.Where(x => !x.Category.ParentCode.Equals("")).GroupBy(x => x.Category.ParentCode).Select(g => new AnalyticsObject
+            query = query.Include(x => x.Category);
+            foreach (var t in query)
             {
-                Catcode = g.Key,
-                Amount = g.Sum(e => e.Amount),
-                Count = g.Count()
-            }).ToListAsync();
+                if (analytics.ContainsKey(t.Catcode))
+                {
+                    analytics[t.Catcode].Amount += t.Amount;
+                    analytics[t.Catcode].Count += 1;
+                    if (!t.Category.ParentCode.Equals("") && String.IsNullOrEmpty(queryObject.Catcode))
+                    {
+                        if (analytics.ContainsKey(t.Category.ParentCode))
+                        {
+                            analytics[t.Category.ParentCode].Amount += t.Amount;
+                            analytics[t.Category.ParentCode].Count += 1;
+                        }
+                        else
+                        {
+                            var obj = new AnalyticsObject();
+                            obj.Catcode = t.Category.ParentCode; obj.Amount = t.Amount; obj.Count = 1;
+                            analytics.Add(t.Catcode, obj);
+                        }
+                    }
+                } else
+                {
+                    var obj = new AnalyticsObject();
+                    obj.Catcode = t.Catcode; obj.Amount = t.Amount; obj.Count = 1;
+                    analytics.Add(t.Catcode, obj);
 
-            return analyticsSub.Concat(analyticsTop).ToList();
+                    if (!t.Category.ParentCode.Equals("") && String.IsNullOrEmpty(queryObject.Catcode))
+                    {
+                        if (analytics.ContainsKey(t.Category.ParentCode))
+                        {
+                            analytics[t.Category.ParentCode].Amount += t.Amount;
+                            analytics[t.Category.ParentCode].Count += 1;
+                        }
+                        else
+                        {
+                            obj = new AnalyticsObject();
+                            obj.Catcode = t.Category.ParentCode; obj.Amount = t.Amount; obj.Count = 1;
+                            analytics.Add(t.Catcode, obj);
+                        }
+                    }
+                }
+            }
+
+            if (setTop.Count() > 0)
+            {
+                var res = analytics.Select(pair => pair.Value).Where(x => setTop.Contains(x.Catcode)).ToList(); // samo top level
+                // treba svrstati i one transakcije koje nemaju kategoriju
+                var uncategorized = await _dbContext.Transactions.Where(x => String.IsNullOrEmpty(x.Catcode)).GroupBy(x => x.Catcode).Select(g => new AnalyticsObject
+                {
+                    Catcode = "uncategorized",
+                    Amount = g.Sum(e => e.Amount),
+                    Count = g.Count()
+                }).ToListAsync();
+
+                return res.Concat(uncategorized).ToList();
+            }
+            else
+            {
+                var res = analytics.Select(pair => pair.Value).ToList();
+                return res;
+            }
         }
     }
 }

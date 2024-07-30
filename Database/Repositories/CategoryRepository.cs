@@ -55,6 +55,12 @@ namespace ProductAPI.Database.Repositories
             return category;
         }
 
+        public async Task<bool> IsTopLevelCategory(string code)
+        {
+            var category = await _dbContext.Categories.FirstOrDefaultAsync(x => x.Code.Equals(code));
+            return String.IsNullOrEmpty(category.ParentCode);
+        }
+
         public async Task<CategoryEntity?> UpdateCategoryAsync(CreateCategoryCommand category)
         {
             var existingCategory = _dbContext.Categories.FirstOrDefault(x => x.Code.Equals(category.Code));

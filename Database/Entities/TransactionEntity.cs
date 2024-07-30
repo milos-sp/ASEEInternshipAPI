@@ -26,7 +26,7 @@ namespace ProductAPI.Database.Entities
 
         public string? Catcode { get; set; }
 
-        public CategoryEntity Category { get; set; } // navigation property
+        public CategoryEntity? Category { get; set; } = null; // navigation property
 
         public List<SplitEntity> Splits { get; set; } = new List<SplitEntity>() { }; // jedna transakcija se deli na vise splitova
 

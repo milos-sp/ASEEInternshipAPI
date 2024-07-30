@@ -12,5 +12,7 @@ namespace ProductAPI.Services
 
         Task<Category> GetCategoryByCode(string code);
 
+        Task<bool> IsTopLevelCategory(string code);
+
     }
 }

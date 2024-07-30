@@ -82,5 +82,10 @@ namespace ProductAPI.Services
             var category = await _repository.GetCategoryByCodeAsync(code);
             return _mapper.Map<Category>(category);
         }
+
+        public async Task<bool> IsTopLevelCategory(string code)
+        {
+            return await _repository.IsTopLevelCategory(code);
+        }
     }
 }

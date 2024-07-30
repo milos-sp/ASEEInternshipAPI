@@ -14,5 +14,7 @@ namespace ProductAPI.Database.Repositories
         Task<CategoryEntity> InsertCategoryAsync(CategoryEntity category);
 
         Task<List<CategoryEntity>> GetAllCategoriesAsync(string parentCode);
+
+        Task<bool> IsTopLevelCategory(string code);
     }
 }
