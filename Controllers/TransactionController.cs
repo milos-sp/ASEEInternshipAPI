@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using ProductAPI.Commands;
 using ProductAPI.Models;
 using ProductAPI.Objects;

@@ -24,14 +24,17 @@ namespace ProductAPI.Validators
 
             if (_transactionKind != null)
             {
-                if (!Enum.IsDefined(typeof(TransactionKind), _transactionKind))
+                foreach(var kind in _transactionKind.Split(",")) // posto moze vise da se navede treba svaki proveriti
                 {
-                    var resp = new ValidatorErrorResponse();
-                    resp.Tag = "transaction-kind";
-                    resp.Error = PascalCaseToKebabCase(ErrorEnum.UnknownEnum.ToString());
-                    resp.Message = $"Validation error: {_transactionKind} is not regular transaction kind";
+                    if (!Enum.IsDefined(typeof(TransactionKind), kind))
+                    {
+                        var resp = new ValidatorErrorResponse();
+                        resp.Tag = "transaction-kind";
+                        resp.Error = PascalCaseToKebabCase(ErrorEnum.UnknownEnum.ToString());
+                        resp.Message = $"Validation error: {kind} is not regular transaction kind";
 
-                    errors.Add(resp);
+                        errors.Add(resp);
+                    }
                 }
             }
 

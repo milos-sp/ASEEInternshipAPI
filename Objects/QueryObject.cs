@@ -7,7 +7,7 @@ namespace ProductAPI.Objects
     public class QueryObject
     {
         [BindProperty(Name = "transaction-kind")]
-        public string? TransactionKind { get; set; }
+        public string? TransactionKind { get; set; } // moze vise da ih bude, razdvojeni zarezom
 
         [BindProperty(Name = "start-date")]
         public DateTime? StartDate { get; set; }

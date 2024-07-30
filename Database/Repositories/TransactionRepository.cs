@@ -60,7 +60,16 @@ namespace ProductAPI.Database.Repositories
 
             if (!String.IsNullOrEmpty(queryObject.TransactionKind))
             {
-                query = query.Where(s => s.Kind.Equals(Enum.Parse(typeof(TransactionKind), queryObject.TransactionKind)));
+                List<string> filters = queryObject.TransactionKind.Split(',').ToList();
+                // var predicate = PredicateBuilder
+                var kinds = new List<TransactionKind>();
+                foreach(var filter in filters)
+                {
+                    TransactionKind k = (TransactionKind) Enum.Parse(typeof(TransactionKind), filter);
+                    kinds.Add(k);
+                }
+                query = query.Where(s => kinds.Contains(s.Kind));
+                // query = query.Where(s => s.Kind.Equals(Enum.Parse(typeof(TransactionKind), queryObject.TransactionKind)));
             }
 
             if(queryObject.StartDate != null)
@@ -181,9 +190,10 @@ namespace ProductAPI.Database.Repositories
                 Catcode = g.Key,
                 Amount = g.Sum(e => e.Amount),
                 Count = g.Count()
-            }).ToListAsync();
+            }).ToListAsync(); // ako se navede category(top-level) onda njega i sve koji imaju njega za parent
+                              // ako se ne navede samo sve top-level (ali moralo bi da uzme u obzir i one kojima je postavljen top-level)
 
-            var analyticsTop = await query.GroupBy(x => x.Category.ParentCode).Select(g => new AnalyticsObject
+            var analyticsTop = await query.Where(x => !x.Category.ParentCode.Equals("")).GroupBy(x => x.Category.ParentCode).Select(g => new AnalyticsObject
             {
                 Catcode = g.Key,
                 Amount = g.Sum(e => e.Amount),

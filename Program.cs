@@ -35,7 +35,7 @@ builder.Services.AddControllers().AddJsonOptions(options => // ovo pretvara enum
     options.JsonSerializerOptions.Converters.Add(
         new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase)
         );
-    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    // options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; // da za mcc pise null
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower; // sredjeno da response bude kebab case
     options.JsonSerializerOptions.WriteIndented = true;
 });
