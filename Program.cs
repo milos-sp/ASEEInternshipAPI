@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Npgsql;
 using ProductAPI.Database;
 using ProductAPI.Database.Repositories;
@@ -42,7 +43,7 @@ builder.Services.AddControllers().AddJsonOptions(options => // ovo pretvara enum
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(o => o.SwaggerDoc("v1", new OpenApiInfo { Title = "Personal Finance Management API" }));
 // DBContext registration
 builder.Services.AddDbContext<DatabaseContext>(opt =>
 {

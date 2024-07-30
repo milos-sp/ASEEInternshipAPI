@@ -164,16 +164,13 @@ namespace ProductAPI.Database.Repositories
         public async Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject)
         {
             var query = _dbContext.Transactions.Where(x => !String.IsNullOrEmpty(x.Catcode));
-            var setTop = new HashSet<string?>();
-            if (!String.IsNullOrEmpty(queryObject.Catcode))
+            var setTop = new HashSet<string>();
+           /* if (!String.IsNullOrEmpty(queryObject.Catcode))
             {
                 query = query.Where(x => x.Catcode.Equals(queryObject.Catcode) || x.Category.ParentCode.Equals(queryObject.Catcode)); // ako treba prikazati analitiku samo za jednu kategoriju
-            }
-            else
-            {
-                // samo top level za sve kategorije
-                setTop = _dbContext.Transactions.Where(x => x.Category.ParentCode.Equals("")).Select(x => x.Catcode).ToHashSet();
-            }
+            }*/
+            // samo top level za sve kategorije
+            setTop = _dbContext.Categories.Where(x => String.IsNullOrEmpty(x.ParentCode)).Select(x => x.Code).ToHashSet();
 
             if (queryObject.Direction != null)
             {
@@ -192,51 +189,110 @@ namespace ProductAPI.Database.Repositories
 
             Dictionary<string, AnalyticsObject> analytics = new Dictionary<string, AnalyticsObject>();
 
-            query = query.Include(x => x.Category);
+            query = query.Include(x => x.Category).Include(x => x.Splits);
+
+            Dictionary<string, string> parentCodes = new Dictionary<string, string>();
+
+            var codes = _dbContext.Categories.Where(x => !String.IsNullOrEmpty(x.ParentCode)).ToList();
+
+            foreach (var item in codes)
+            {
+                parentCodes.Add(item.Code, item.ParentCode);
+            }
+
             foreach (var t in query)
             {
-                if (analytics.ContainsKey(t.Catcode))
+                if (t.Splits.Count > 0)
                 {
-                    analytics[t.Catcode].Amount += t.Amount;
-                    analytics[t.Catcode].Count += 1;
-                    if (!t.Category.ParentCode.Equals("") && String.IsNullOrEmpty(queryObject.Catcode))
+                    foreach (var s in t.Splits)
                     {
-                        if (analytics.ContainsKey(t.Category.ParentCode))
+                        if (analytics.ContainsKey(s.Catcode))
                         {
-                            analytics[t.Category.ParentCode].Amount += t.Amount;
-                            analytics[t.Category.ParentCode].Count += 1;
+                            analytics[s.Catcode].Amount += s.Amount;
+                            analytics[s.Catcode].Count += 1;
+
+                            if (!setTop.Contains(s.Catcode) && String.IsNullOrEmpty(queryObject.Catcode))
+                            {
+                                if (analytics.ContainsKey(parentCodes[s.Catcode]))
+                                {
+                                    analytics[parentCodes[s.Catcode]].Amount += s.Amount;
+                                    analytics[parentCodes[s.Catcode]].Count += 1;
+                                }
+                                else
+                                {
+                                    var obj = new AnalyticsObject();
+                                    obj.Catcode = parentCodes[s.Catcode]; obj.Amount = s.Amount; obj.Count = 1;
+                                    analytics.Add(parentCodes[s.Catcode], obj);
+                                }
+                            }
                         }
                         else
                         {
                             var obj = new AnalyticsObject();
-                            obj.Catcode = t.Category.ParentCode; obj.Amount = t.Amount; obj.Count = 1;
-                            analytics.Add(t.Catcode, obj);
+                            obj.Catcode = s.Catcode; obj.Amount = s.Amount; obj.Count = 1;
+                            analytics.Add(s.Catcode, obj);
+
+                            if (!setTop.Contains(s.Catcode) && String.IsNullOrEmpty(queryObject.Catcode))
+                            {
+                                if (analytics.ContainsKey(parentCodes[s.Catcode]))
+                                {
+                                    analytics[parentCodes[s.Catcode]].Amount += s.Amount;
+                                    analytics[parentCodes[s.Catcode]].Count += 1;
+                                }
+                                else
+                                {
+                                    obj = new AnalyticsObject();
+                                    obj.Catcode = parentCodes[s.Catcode]; obj.Amount = s.Amount; obj.Count = 1;
+                                    analytics.Add(parentCodes[s.Catcode], obj);
+                                }
+                            }
                         }
                     }
-                } else
-                {
-                    var obj = new AnalyticsObject();
-                    obj.Catcode = t.Catcode; obj.Amount = t.Amount; obj.Count = 1;
-                    analytics.Add(t.Catcode, obj);
-
-                    if (!t.Category.ParentCode.Equals("") && String.IsNullOrEmpty(queryObject.Catcode))
+                } else {
+                    if (analytics.ContainsKey(t.Catcode))
                     {
-                        if (analytics.ContainsKey(t.Category.ParentCode))
+                        analytics[t.Catcode].Amount += t.Amount;
+                        analytics[t.Catcode].Count += 1;
+                        if (!t.Category.ParentCode.Equals("") && String.IsNullOrEmpty(queryObject.Catcode)) // ako se gleda po top level kategoriji
                         {
-                            analytics[t.Category.ParentCode].Amount += t.Amount;
-                            analytics[t.Category.ParentCode].Count += 1;
+                            if (analytics.ContainsKey(t.Category.ParentCode))
+                            {
+                                analytics[t.Category.ParentCode].Amount += t.Amount;
+                                analytics[t.Category.ParentCode].Count += 1;
+                            }
+                            else
+                            {
+                                var obj = new AnalyticsObject();
+                                obj.Catcode = t.Category.ParentCode; obj.Amount = t.Amount; obj.Count = 1;
+                                analytics.Add(t.Category.ParentCode, obj);
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        var obj = new AnalyticsObject();
+                        obj.Catcode = t.Catcode; obj.Amount = t.Amount; obj.Count = 1;
+                        analytics.Add(t.Catcode, obj);
+
+                        if (!t.Category.ParentCode.Equals("") && String.IsNullOrEmpty(queryObject.Catcode))
                         {
-                            obj = new AnalyticsObject();
-                            obj.Catcode = t.Category.ParentCode; obj.Amount = t.Amount; obj.Count = 1;
-                            analytics.Add(t.Catcode, obj);
+                            if (analytics.ContainsKey(t.Category.ParentCode))
+                            {
+                                analytics[t.Category.ParentCode].Amount += t.Amount;
+                                analytics[t.Category.ParentCode].Count += 1;
+                            }
+                            else
+                            {
+                                obj = new AnalyticsObject();
+                                obj.Catcode = t.Category.ParentCode; obj.Amount = t.Amount; obj.Count = 1;
+                                analytics.Add(t.Category.ParentCode, obj);
+                            }
                         }
                     }
                 }
             }
 
-            if (setTop.Count() > 0)
+            if (String.IsNullOrEmpty(queryObject.Catcode))
             {
                 var res = analytics.Select(pair => pair.Value).Where(x => setTop.Contains(x.Catcode)).ToList(); // samo top level
                 // treba svrstati i one transakcije koje nemaju kategoriju
@@ -250,8 +306,9 @@ namespace ProductAPI.Database.Repositories
                 return res.Concat(uncategorized).ToList();
             }
             else
-            {
-                var res = analytics.Select(pair => pair.Value).ToList();
+            {   // mora ova druga provera zbog splitova
+                var res = analytics.Select(pair => pair.Value).Where(pair => pair.Catcode.Equals(queryObject.Catcode) 
+                    || (!setTop.Contains(pair.Catcode) && parentCodes[pair.Catcode].Equals(queryObject.Catcode))).ToList();
                 return res;
             }
         }
