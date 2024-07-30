@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using ProductAPI.Commands;
 using ProductAPI.Models;
 using ProductAPI.Objects;
 using ProductAPI.Services;
 using ProductAPI.Validators;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ProductAPI.Controllers
 {
@@ -132,6 +135,19 @@ namespace ProductAPI.Controllers
             await _splitService.SplitTransaction(id, splits);
 
             return Ok("OK - Transaction splitted");
+        }
+
+        [HttpPost("auto-categorize")]
+        public async Task<IActionResult> AutoCategorize()
+        {
+            string configFile = "Config/rules.json";
+            var json = System.IO.File.ReadAllText(configFile);
+            var rules = JsonConvert.DeserializeObject<List<Rule>>(json);
+
+            await _transactionService.AutoCategorizeTransactions(rules);
+
+            // return Ok(rules);
+            return Ok("OK - Transaction auto categorized");
         }
     }
 }

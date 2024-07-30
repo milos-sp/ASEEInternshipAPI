@@ -127,5 +127,10 @@ namespace ProductAPI.Services
 
             return analytics;
         }
+
+        public async Task<bool> AutoCategorizeTransactions(List<Rule> rules)
+        {
+            return await _repository.AutoCategorizeTransactions(rules);
+        }
     }
 }

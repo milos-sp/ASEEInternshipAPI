@@ -1,0 +1,167 @@
+[
+    {
+        "field": "mcc",
+        "value": "5811",
+        "catcode": "39"
+    },
+    {
+        "field": "beneficiary-name",
+        "value": "chevron",
+        "catcode": "4"
+    },
+    {
+        "field": "beneficiary-name",
+        "value": "shell",
+        "catcode": "4"
+    },
+    {
+        "field": "description",
+        "value": "internet",
+        "catcode": "10"
+    },
+    {
+        "field": "description",
+        "value": "mobile",
+        "catcode": "11"
+    },
+    {
+        "field": "description",
+        "value": "television",
+        "catcode": "12"
+    },
+    {
+        "field": "mcc",
+        "value": "7519",
+        "catcode": "105"
+    },
+    {
+        "field": "description",
+        "value": "rent",
+        "catcode": "58"
+    },
+    {
+        "field": "mcc",
+        "value": "5499",
+        "catcode": "38"
+    },
+    {
+        "field": "description",
+        "value": "tuition",
+        "catcode": "17"
+    },
+    {
+        "field": "beneficiary-name",
+        "value": "fit",
+        "catcode": "47"
+    },
+    {
+        "field": "mcc",
+        "value": "5045",
+        "catcode": "90"
+    },
+    {
+        "field": "mcc",
+        "value": "5192",
+        "catcode": "88"
+    },
+    {
+        "field": "mcc",
+        "value": "5200",
+        "catcode": "56"
+    },
+    {
+        "field": "mcc",
+        "value": "5655",
+        "catcode": "50"
+    },
+    {
+        "field": "description",
+        "value": "medicine",
+        "catcode": "49"
+    },
+    {
+        "field": "mcc",
+        "value": "5995",
+        "catcode": "84"
+    },
+    {
+        "field": "mcc",
+        "value": "5733",
+        "catcode": "22"
+    },
+    {
+        "field": "mcc",
+        "value": "5947",
+        "catcode": "42"
+    },
+    {
+        "field": "mcc",
+        "value": "6300",
+        "catcode": "33"
+    },
+    {
+        "field": "description",
+        "value": "hair",
+        "catcode": "80"
+    },
+    {
+        "field": "beneficiary-name",
+        "value": "leasing",
+        "catcode": "3"
+    },
+    {
+        "field": "mcc",
+        "value": "7523",
+        "catcode": "5"
+    },
+    {
+        "field": "mcc",
+        "value": "8011",
+        "catcode": "45"
+    },
+    {
+        "field": "mcc",
+        "value": "8050",
+        "catcode": "82"
+    },
+    {
+        "field": "mcc",
+        "value": "9311",
+        "catcode": "96"
+    },
+    {
+        "field": "beneficiary-name",
+        "value": "book",
+        "catcode": "15"
+    },
+    {
+        "field": "description",
+        "value": "loan",
+        "catcode": "77"
+    },
+    {
+        "field": "description",
+        "value": "allowance",
+        "catcode": "67"
+    },
+    {
+        "field": "description",
+        "value": "charity",
+        "catcode": "41"
+    },
+    {
+        "field": "description",
+        "value": "salary",
+        "catcode": "62"
+    },
+    {
+        "field": "mcc",
+        "value": "5955",
+        "catcode": "84"
+    },
+    {
+        "field": "beneficiary-name",
+        "value": "revolut",
+        "catcode": "25"
+    }
+]

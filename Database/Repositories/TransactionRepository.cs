@@ -312,5 +312,30 @@ namespace ProductAPI.Database.Repositories
                 return res;
             }
         }
+
+        public async Task<bool> AutoCategorizeTransactions(List<Rule> rules)
+        {
+            foreach (var rule in rules)
+            {
+                var transactions = _dbContext.Transactions.Where(x => String.IsNullOrEmpty(x.Catcode));
+                switch (rule.Field)
+                {
+                    case "mcc":
+                        await transactions.Where(x => x.Mcc == Int32.Parse(rule.Value))
+                            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
+                        break;
+                    case "beneficiary-name":
+                        await transactions.Where(x => x.BeneficiaryName.ToLower().Contains(rule.Value))
+                            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
+                        break;
+                    case "description":
+                        await transactions.Where(x => x.Description.ToLower().Contains(rule.Value))
+                            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
+                        break;
+                }
+            }
+
+            return true;
+        }
     }
 }

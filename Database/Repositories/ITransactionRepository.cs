@@ -18,5 +18,7 @@ namespace ProductAPI.Database.Repositories
 
         Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject);
 
+        Task<bool> AutoCategorizeTransactions(List<Rule> rules);
+
     }
 }

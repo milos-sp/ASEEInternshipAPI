@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductAPI.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
 namespace ProductAPI.Objects
@@ -19,6 +20,7 @@ namespace ProductAPI.Objects
         public int Page { get; set; } = 1;
 
         [BindProperty(Name = "page-size")]
+        [Range(5, 100, ErrorMessage = "Page size must be between 5 and 100")]
         public int PageSize { get; set; } = 10;
 
         [BindProperty(Name = "sort-by")]

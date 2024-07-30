@@ -15,5 +15,7 @@ namespace ProductAPI.Services
         Task<Transaction> UpdateCategory(string id, string catcode);
 
         Task<List<AnalyticsObject>> GetSpendingAnalytics(AnalyticsQueryObject queryObject);
+
+        Task<bool> AutoCategorizeTransactions(List<Rule> rules);
     }
 }
