@@ -136,5 +136,53 @@
         "description": "Doctors or physicians",
         "catcode": "45",
         "predicate": "\"Mcc\" = 8011"
+    },
+    {
+        "field": "mcc",
+        "description": "Spa and massage",
+        "catcode": "82",
+        "predicate": "\"Mcc\" = 8050"
+    },
+    {
+        "field": "mcc",
+        "description": "Tax payment",
+        "catcode": "96",
+        "predicate": "\"Mcc\" = 9311"
+    },
+    {
+        "field": "beneficiary-name",
+        "description": "Books",
+        "catcode": "15",
+        "predicate": "LOWER(\"BeneficiaryName\") LIKE '%book%'"
+    },
+    {
+        "field": "description",
+        "description": "Loans",
+        "catcode": "77",
+        "predicate": "LOWER(\"Description\") LIKE '%loan%'"
+    },
+    {
+        "field": "description",
+        "description": "Allowance",
+        "catcode": "67",
+        "predicate": "LOWER(\"Description\") LIKE '%allowance%'"
+    },
+    {
+        "field": "description",
+        "description": "Charity",
+        "catcode": "41",
+        "predicate": "LOWER(\"Description\") LIKE '%charity%'"
+    },
+    {
+        "field": "description",
+        "description": "Salary",
+        "catcode": "62",
+        "predicate": "LOWER(\"Description\") LIKE '%salary%'"
+    },
+    {
+        "field": "beneficiary-name",
+        "description": "revolut",
+        "catcode": "3",
+        "predicate": "LOWER(\"BeneficiaryName\") LIKE '%revolut%'"
     }
 ]
