@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Extensions;
+using Npgsql;
 using ProductAPI.Database.Entities;
 using ProductAPI.Models;
 using ProductAPI.Objects;
 using System;
+//using System.Data;
+//using System.Data.SqlClient;
 using System.Globalization;
 
 namespace ProductAPI.Database.Repositories
@@ -315,9 +318,16 @@ namespace ProductAPI.Database.Repositories
 
         public async Task<bool> AutoCategorizeTransactions(List<Rule> rules)
         {
+            // var predicateParameter = new NpgsqlParameter("@predicate", "10108594");
+            // await _dbContext.Database.ExecuteSqlRawAsync($"UPDATE transactions SET \"Catcode\" = 'G' WHERE \"Id\" = @predicate", predicateParameter);
+            
             foreach (var rule in rules)
             {
-                var transactions = _dbContext.Transactions.Where(x => String.IsNullOrEmpty(x.Catcode));
+                // var predicateParam = new NpgsqlParameter("@predicate", rule.Predicate);
+                var codeParam = new NpgsqlParameter("@code", rule.Catcode);
+                await _dbContext.Database.ExecuteSqlRawAsync($"UPDATE transactions SET \"Catcode\" = @code WHERE ({rule.Predicate}) AND \"Catcode\" IS NULL", codeParam);
+
+                /*var transactions = _dbContext.Transactions.Where(x => String.IsNullOrEmpty(x.Catcode));
                 switch (rule.Field)
                 {
                     case "mcc":
@@ -332,7 +342,7 @@ namespace ProductAPI.Database.Repositories
                         await transactions.Where(x => x.Description.ToLower().Contains(rule.Value))
                             .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
                         break;
-                }
+                }*/
             }
 
             return true;

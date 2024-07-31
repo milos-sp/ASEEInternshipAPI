@@ -42,7 +42,7 @@ namespace ProductAPI.Controllers
 
             var inserted = await _transactionService.InsertTransactions(transactions);
 
-            return Ok(inserted ? "OK - Transactions inserted" : "Not inserted");
+            return Ok("OK - Number of transactions inserted: " + inserted);
         }
 
         [HttpGet]
@@ -87,13 +87,9 @@ namespace ProductAPI.Controllers
         [HttpPost("{id}/split")]
         public async Task<IActionResult> SplitTransaction([FromRoute] string id, [FromBody] List<SplitTransactionCommand> splits)
         {
-            // kao stock i comments
-            // imace listu transakcija koje su nastale od neke
-            // u novoj tabeli je id transakcije strani kljuc za sve splitovane
-            // pored stranog kljuca moze autogenerisani id i amount
-            // ako vec postoje neke sa id kao stranim kljucem brisu se pa se splituje ponovo po zahtevu
             if (!ModelState.IsValid)
             {
+                // ModelState.GetValidationState();
                 return BadRequest(ModelState);
             }
 

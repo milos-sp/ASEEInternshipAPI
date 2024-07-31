@@ -64,7 +64,7 @@ namespace ProductAPI.Services
             return _mapper.Map<Transaction>(transaction);
         }
 
-        public async Task<bool> InsertTransactions(IEnumerable<CreateTransactionCommand> transactions)
+        public async Task<int> InsertTransactions(IEnumerable<CreateTransactionCommand> transactions)
         {
             int index = 1;
             List<TransactionEntity> transactionsList = new List<TransactionEntity>();
@@ -112,7 +112,7 @@ namespace ProductAPI.Services
 
             _logger.LogInformation($"Number of inserted rows: {count}");
 
-            return true;
+            return count;
         }
 
         public async Task<Transaction> UpdateCategory(string id, string catcode)
