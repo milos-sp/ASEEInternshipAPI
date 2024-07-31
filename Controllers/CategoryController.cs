@@ -25,6 +25,10 @@ namespace ProductAPI.Controllers
         [HttpPost("import")]
         public async Task<IActionResult> InsertCategoriesAsync([FromForm] IFormFileCollection csvFile)
         {
+            if (csvFile.Count() == 0)
+            {
+                return BadRequest("CSV file not imported");
+            }
             // bitno je staviti u postman key csvFile
             var categories = _csvService.ReadCSV<CreateCategoryCommand>(csvFile[0].OpenReadStream());
 
