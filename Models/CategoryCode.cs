@@ -1,4 +1,6 @@
-﻿namespace ProductAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProductAPI.Models
 {
     public class CategoryCode
     {

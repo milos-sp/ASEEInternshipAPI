@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductAPI.Commands;
+using ProductAPI.Models;
 using ProductAPI.Services;
+using ProductAPI.Validators;
 
 namespace ProductAPI.Controllers
 {
@@ -27,7 +29,11 @@ namespace ProductAPI.Controllers
         {
             if (csvFile.Count() == 0)
             {
-                return BadRequest("CSV file not imported");
+                var resp = new ValidatorErrorResponse();
+                resp.Tag = "no-csv";
+                resp.Error = "CSV not imported";
+                resp.Message = $"CSV file not selected";
+                return BadRequest(new { errors = resp });
             }
             // bitno je staviti u postman key csvFile
             var categories = _csvService.ReadCSV<CreateCategoryCommand>(csvFile[0].OpenReadStream());
@@ -45,7 +51,7 @@ namespace ProductAPI.Controllers
         {
             var categories = await _categoryService.GetAllCategories(ParentCode);
 
-            return Ok(categories);
+            return Ok(new { items = categories });
         }
 
     }

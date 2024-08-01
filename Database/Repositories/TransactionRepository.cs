@@ -133,6 +133,11 @@ namespace ProductAPI.Database.Repositories
             var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling(totalCount * 1.0 / queryObject.PageSize);
 
+            if(queryObject.Page > totalPages)
+            {
+                queryObject.Page = 1;
+            }
+
             query = query.Skip((queryObject.Page - 1) * queryObject.PageSize).Take(queryObject.PageSize);
             
             var transactions = await query.ToListAsync();
@@ -325,24 +330,8 @@ namespace ProductAPI.Database.Repositories
             {
                 // var predicateParam = new NpgsqlParameter("@predicate", rule.Predicate);
                 var codeParam = new NpgsqlParameter("@code", rule.Catcode);
-                await _dbContext.Database.ExecuteSqlRawAsync($"UPDATE transactions SET \"Catcode\" = @code WHERE ({rule.Predicate}) AND \"Catcode\" IS NULL", codeParam);
-
-                /*var transactions = _dbContext.Transactions.Where(x => String.IsNullOrEmpty(x.Catcode));
-                switch (rule.Field)
-                {
-                    case "mcc":
-                        await transactions.Where(x => x.Mcc == Int32.Parse(rule.Value))
-                            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
-                        break;
-                    case "beneficiary-name":
-                        await transactions.Where(x => x.BeneficiaryName.ToLower().Contains(rule.Value))
-                            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
-                        break;
-                    case "description":
-                        await transactions.Where(x => x.Description.ToLower().Contains(rule.Value))
-                            .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Catcode, rule.Catcode));
-                        break;
-                }*/
+                await _dbContext.Database.ExecuteSqlRawAsync
+                    ($"UPDATE transactions SET \"Catcode\" = @code WHERE ({rule.Predicate}) AND \"Catcode\" IS NULL", codeParam);
             }
 
             return true;

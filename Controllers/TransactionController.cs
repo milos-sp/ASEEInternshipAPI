@@ -39,7 +39,11 @@ namespace ProductAPI.Controllers
         { 
             if (csvFile.Count() == 0)
             {
-                return BadRequest("CSV file not imported");
+                var resp = new ValidatorErrorResponse();
+                resp.Tag = "no-csv";
+                resp.Error = "CSV not imported";
+                resp.Message = $"CSV file not selected";
+                return BadRequest(new { errors = resp });
             }
             // bitno je staviti u postman key csvFile
             var transactions = _csvService.ReadCSV<CreateTransactionCommand>(csvFile[0].OpenReadStream());
@@ -72,7 +76,12 @@ namespace ProductAPI.Controllers
 
             if (resp != null)
             {
-                return BadRequest(new { errors = resp} );
+                return BadRequest(new { errors = resp } );
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             // ako su parametri ok, treba proveriti da li postoje transakcija i kategorija
@@ -93,7 +102,6 @@ namespace ProductAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // ModelState.GetValidationState();
                 return BadRequest(ModelState);
             }
 
@@ -123,6 +131,19 @@ namespace ProductAPI.Controllers
                 err.Details = "Sum of amounts from splits must be equal to transaction amount";
 
                 return StatusCode(440, err);
+            }
+
+            foreach (var split in splits)
+            {
+                if(await _categoryService.GetCategoryByCode(split.Catcode) == null)
+                {
+                    var err = new BusinessProblemResponse();
+                    err.Problem = "category-does-not-exist";
+                    err.Message = "Category does not exist";
+                    err.Details = $"Category with provided category id {split.Catcode} does not exist";
+
+                    return StatusCode(440, err);
+                }
             }
 
             // ako je transakcija vec splitovana, obrisati splitove pa ponovo splitovati
