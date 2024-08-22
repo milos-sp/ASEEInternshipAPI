@@ -1,12 +1,10 @@
 # ASEE Internship Project - Personal Finance Management
-=======================================================
 
 # PFM Backend
-=======================================================
+
 Backend written in .NET Core, PostgreSQL used as a database
 
 # Features
------------
 
 ## Import transactions from csv file
 
@@ -73,3 +71,4 @@ Backend written in .NET Core, PostgreSQL used as a database
     }
 ]
 ```
+
